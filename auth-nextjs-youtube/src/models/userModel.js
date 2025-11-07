@@ -3,19 +3,19 @@ import mongoose from "mongoose"
 const userSchema = new mongoose.Schema({
      
     username: {
-        type: stringify,
-        requried: [true, "Please provide a username"],
+        type: String,
+        required: [true, "Please provide a username"],
         unique: true,
     },
     email: {
         type: String,
-        requried: [true, "Please provide an email"],
+        required: [true, "Please provide an email"],
         unique: true,
         
     },
     password: {
         type: String,
-        requried: [true, "Please provide a password"],
+        required: [true, "Please provide a password"],
         // minlength: 6,    
     },
     isVerfied: {
