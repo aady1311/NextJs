@@ -75,7 +75,13 @@ export default function LoginPage() {
               className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
               disabled={buttonDisabled}
               >{buttonDisabled ? "Please fill all fields" : "Login"}</button>
-              <Link href="/signup">Visit Signup page</Link>
+              
+              <div className="flex flex-col items-center gap-2">
+                  <Link href="/forgotpassword" className="text-blue-600 hover:underline">
+                      Forgot Password?
+                  </Link>
+                  <Link href="/signup">Visit Signup page</Link>
+              </div>
 
         </div>
     )
