@@ -41,3 +41,9 @@ login karna signup karna verify karne ke liye
 https://mailtrap.io/inboxes/4165942/messages/5183120818
 yaha ek verify krne ke liye url milega usko run karna hai fir mongodb mein jakar true check karna hai forget password ka seen ye hai ki forget karo anf visit mailtrap waha se new password set karo and try to login again 
 
+
+
+app write 
+sdk
+magic 
+uiw

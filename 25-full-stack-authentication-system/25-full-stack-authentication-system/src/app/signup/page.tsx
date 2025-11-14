@@ -76,7 +76,8 @@ export default function SignupPage() {
             />
             <button
             onClick={onSignup}
-            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">{buttonDisabled ? "No signup" : "Signup"}</button>
+            disabled={buttonDisabled}
+            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">{buttonDisabled ? "Please fill all fields" : "Signup"}</button>
             <Link href="/login">Visit login page</Link>
         </div>
     )
