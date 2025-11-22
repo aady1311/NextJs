@@ -17,16 +17,19 @@ export async function POST(request: NextRequest){
 
         const reqBody = await request.json()
         const {email, password} = reqBody;
+        console.log("Login attempt for:", email);
 
         //  check if user exixts
 
         const user = await User.findOne({email})
+        console.log("User found:", !!user);
         if(!user){
             return NextResponse.json({error: "User does not exist"}, {status: 400});
         }
 
         // check if password is correct 
         const validPassword = await bcryptjs.compare(password, user.password)
+        console.log("Password valid:", validPassword);
         if(!validPassword){
             return NextResponse.json({error: "Invalid password"}, {status: 400})
         }
