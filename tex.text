@@ -4,3 +4,25 @@ touch modles/Question.js  isse Question.js file create hoga modles folder ke and
 
 appwrite 
 zustand
+shadcn
+npm install zustand
+npm install immer
+npx shadcn@latest add button
+
+
+libeary npmjs.com
+
+Database connection
+Storage Connected
+Question collection is created
+Answer Collection Created
+Vote Collection Created
+Question Attributes created
+Comment Collection Created
+Answer Attributes Created
+Vote Attributes Created
+Comment Attributes Created
+Collections created/verified
+ GET /api/setup 200 in 1935ms 
+
+ http://localhost:3000/api/setup

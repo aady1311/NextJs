@@ -1,4 +1,4 @@
-export const db = "main-stackflow"
+export const db = "69212afa000c996b5232"
 export const questionCollection = "questions"
 export const answerCollection = "answers"
 export const commentCollection = "comments"
