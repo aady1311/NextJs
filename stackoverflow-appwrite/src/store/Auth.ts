@@ -54,15 +54,29 @@ export const useAuthStore = create<IAuthStore>()(
             async verifySession() {
                 try {
                     const session = await account.getSession("current")
-                    set({ session })
+                    const user = await account.get<UserPrefs>()
+                    const { jwt } = await account.createJWT()
+                    set({ session, user, jwt })
 
                 } catch (error) {
                     console.log(error);
+                    set({ session: null, user: null, jwt: null })
                 }
 
             },
             async login(email: string, password: string) {
                 try {
+                    // Check if there's already an active session
+                    try {
+                        const existingSession = await account.getSession("current")
+                        if (existingSession) {
+                            // Delete existing session first
+                            await account.deleteSession("current")
+                        }
+                    } catch (e) {
+                        // No existing session, continue
+                    }
+
                     const session = await account.createEmailPasswordSession(email, password)
                     const [user, { jwt }] = await Promise.all([
                         account.get<UserPrefs>(),
@@ -86,6 +100,16 @@ export const useAuthStore = create<IAuthStore>()(
             },
             async CreateAccount(name: string, email: string, password: string) {
                 try {
+                    // Check if there's already an active session and delete it
+                    try {
+                        const existingSession = await account.getSession("current")
+                        if (existingSession) {
+                            await account.deleteSession("current")
+                        }
+                    } catch (e) {
+                        // No existing session, continue
+                    }
+
                     await account.create(ID.unique(), email, password, name)
                     return { success: true }
 
