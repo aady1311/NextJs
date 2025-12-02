@@ -37,56 +37,105 @@ const Page = async ({
 
     questions.documents = await Promise.all(
         questions.documents.map(async ques => {
-            const [author, answers, votes] = await Promise.all([
-                users.get<UserPrefs>(ques.authorId),
-                databases.listDocuments(db, answerCollection, [
-                    Query.equal("questionId", ques.$id),
-                    Query.limit(1), // for optimization
-                ]),
-                databases.listDocuments(db, voteCollection, [
-                    Query.equal("type", "question"),
-                    Query.equal("typeId", ques.$id),
-                    Query.limit(1), // for optimization
-                ]),
-            ]);
+            try {
+                const [author, answers, votes] = await Promise.all([
+                    users.get<UserPrefs>(ques.authorId).catch(() => null),
+                    databases.listDocuments(db, answerCollection, [
+                        Query.equal("questionId", ques.$id),
+                        Query.limit(1),
+                    ]),
+                    databases.listDocuments(db, voteCollection, [
+                        Query.equal("type", "question"),
+                        Query.equal("typeId", ques.$id),
+                        Query.limit(1),
+                    ]),
+                ]);
 
-            return {
-                ...ques,
-                totalAnswers: answers.total,
-                totalVotes: votes.total,
-                author: {
-                    $id: author.$id,
-                    reputation: author.prefs.reputation,
-                    name: author.name,
-                },
-            };
+                return {
+                    ...ques,
+                    totalAnswers: answers.total,
+                    totalVotes: votes.total,
+                    author: author ? {
+                        $id: author.$id,
+                        reputation: author.prefs?.reputation || 0,
+                        name: author.name,
+                    } : {
+                        $id: "unknown",
+                        reputation: 0,
+                        name: "Unknown User",
+                    },
+                };
+            } catch (error) {
+                return {
+                    ...ques,
+                    totalAnswers: 0,
+                    totalVotes: 0,
+                    author: {
+                        $id: "unknown",
+                        reputation: 0,
+                        name: "Unknown User",
+                    },
+                };
+            }
         })
     );
 
     return (
-        <div className="container mx-auto px-4 pb-20 pt-36">
-            <div className="mb-10 flex items-center justify-between">
-                <h1 className="text-3xl font-bold">All Questions</h1>
-                <Link href="/questions/ask">
-                    <ShimmerButton className="shadow-2xl">
-                        <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
-                            Ask a question
-                        </span>
-                    </ShimmerButton>
-                </Link>
+        <div className="min-h-screen bg-black">
+            <div className="container mx-auto px-4 pb-20 pt-24">
+                <div className="mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                            All Questions
+                        </h1>
+                        <p className="text-gray-300">
+                            {questions.total} {questions.total === 1 ? 'question' : 'questions'} from our community
+                        </p>
+                    </div>
+                    <Link href="/questions/ask">
+                        <ShimmerButton className="shadow-2xl">
+                            <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white lg:text-lg">
+                                ✨ Ask a Question
+                            </span>
+                        </ShimmerButton>
+                    </Link>
+                </div>
+                
+                <div className="mb-8">
+                    <Search />
+                </div>
+                
+                {questions.documents.length === 0 ? (
+                    <div className="text-center py-20">
+                        <div className="text-6xl mb-4">🤔</div>
+                        <h3 className="text-2xl font-semibold mb-2 text-white">No questions found</h3>
+                        <p className="text-gray-300 mb-6">
+                            {params.search || params.tag 
+                                ? "Try adjusting your search or filters" 
+                                : "Be the first to ask a question!"}
+                        </p>
+                        <Link href="/questions/ask">
+                            <ShimmerButton>
+                                <span className="text-white font-medium">
+                                    Ask the First Question
+                                </span>
+                            </ShimmerButton>
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="space-y-6">
+                        {questions.documents.map(ques => (
+                            <QuestionCard key={ques.$id} ques={ques} />
+                        ))}
+                    </div>
+                )}
+                
+                {questions.total > 25 && (
+                    <div className="mt-12">
+                        <Pagination total={questions.total} limit={25} />
+                    </div>
+                )}
             </div>
-            <div className="mb-4">
-                <Search />
-            </div>
-            <div className="mb-4">
-                <p>{questions.total} questions</p>
-            </div>
-            <div className="mb-4 max-w-3xl space-y-6">
-                {questions.documents.map(ques => (
-                    <QuestionCard key={ques.$id} ques={ques} />
-                ))}
-            </div>
-            <Pagination total={questions.total} limit={25} />
         </div>
     );
 };

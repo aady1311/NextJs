@@ -6,6 +6,7 @@ export default async function getOrCreateStorage() {
     try {
         await storage.getBucket(questionAttachmentBucket);
         console.log("Storage Connected");
+        return { success: true, message: "Storage connected" };
     } catch (error) {
         try {
             await storage.createBucket(
@@ -25,9 +26,14 @@ export default async function getOrCreateStorage() {
             );
 
             console.log("Storage Created");
-            console.log("Storage Connected");
-        } catch (error) {
-            console.error("Error creating storage:", error);
+            return { success: true, message: "Storage created" };
+        } catch (createError: any) {
+            if (createError.code === 403 && createError.type === 'additional_resource_not_allowed') {
+                console.log("Storage bucket limit reached - continuing without file uploads");
+                return { success: false, message: "Storage limit reached - file uploads disabled" };
+            }
+            console.error("Error creating storage:", createError);
+            return { success: false, message: "Storage setup failed" };
         }
     }
 }

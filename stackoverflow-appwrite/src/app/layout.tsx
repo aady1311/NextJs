@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StackOverflow Clone",
-  description: "A StackOverflow clone built with Next.js and Appwrite",
+  title: "DevStack - Developer Community",
+  description: "A modern developer community platform built with Next.js and Appwrite",
 };
 
 export default function RootLayout({
@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
         <AuthProvider>
           <GlobalNavbar />

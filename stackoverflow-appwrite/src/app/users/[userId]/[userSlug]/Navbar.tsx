@@ -10,34 +10,34 @@ const Navbar = () => {
 
     const items = [
         {
-            name: "Summary",
+            name: "📊 Summary",
             href: `/users/${userId}/${userSlug}`,
         },
         {
-            name: "Questions",
+            name: "❓ Questions",
             href: `/users/${userId}/${userSlug}/questions`,
         },
         {
-            name: "Answers",
+            name: "✅ Answers",
             href: `/users/${userId}/${userSlug}/answers`,
         },
         {
-            name: "Votes",
+            name: "🗳️ Votes",
             href: `/users/${userId}/${userSlug}/votes`,
         },
     ];
 
     return (
-        <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-4 mb-6">
             <nav className="flex flex-wrap gap-2">
                 {items.map(item => (
                     <Link
                         key={item.name}
                         href={item.href}
-                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                             pathname === item.href 
-                                ? "bg-blue-600 text-white" 
-                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg" 
+                                : "bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white"
                         }`}
                     >
                         {item.name}

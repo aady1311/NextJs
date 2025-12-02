@@ -1,3 +1,71 @@
+Reputation System Explanation
+Reputation is a point-based system that measures a user's contribution and trustworthiness in the community. Here's how it works:
+
+How You Earn Reputation:
+Positive Actions:
+
++15 points - Your answer gets accepted as the best answer
+
++10 points - Someone upvotes your question
+
++10 points - Someone upvotes your answer
+
++5 points - You upvote someone else's content (encouraging participation)
+
++2 points - You accept an answer to your question
+
+Quality Bonuses:
+
++50 points - Your question gets 10+ upvotes (popular question)
+
++100 points - Your answer gets 25+ upvotes (great answer)
+
++200 points - Your answer gets 100+ upvotes (legendary answer)
+
+How You Lose Reputation:
+Negative Actions:
+
+-2 points - Someone downvotes your question/answer
+
+-1 point - You downvote someone else's content
+
+-15 points - Your answer gets unaccepted
+
+-100 points - Content gets flagged and removed for spam/abuse
+
+Reputation Benefits:
+Privileges Unlocked:
+
+15+ points - Can upvote posts
+
+50+ points - Can comment on any post
+
+125+ points - Can downvote posts
+
+250+ points - Can flag posts
+
+500+ points - Can edit other users' posts
+
+1000+ points - Can delete posts
+
+3000+ points - Can close/reopen questions
+
+10000+ points - Can access moderation tools
+
+Current Implementation:
+In your app, reputation starts at 0 and is stored in user preferences (user.prefs.reputation). The system encourages:
+
+Asking good questions
+
+Providing helpful answers
+
+Engaging positively with the community
+
+Building trust through consistent quality contributions
+
+This gamification motivates users to contribute valuable content and helps identify trusted community members.
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

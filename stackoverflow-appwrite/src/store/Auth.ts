@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 import { AppwriteException, ID, Models } from "appwrite";
 import { account } from "../models/client/config";
 import { immer } from "zustand/middleware/immer";
+import env from "../app/env";
 
 export interface UserPrefs {
     reputation: number
@@ -57,40 +58,29 @@ export const useAuthStore = create<IAuthStore>()(
                     const user = await account.get<UserPrefs>()
                     const { jwt } = await account.createJWT()
                     set({ session, user, jwt })
-
                 } catch (error) {
-                    console.log(error);
                     set({ session: null, user: null, jwt: null })
                 }
-
             },
             async login(email: string, password: string) {
                 try {
-                    // Check if there's already an active session
+                    // Delete any existing session first
                     try {
-                        const existingSession = await account.getSession("current")
-                        if (existingSession) {
-                            // Delete existing session first
-                            await account.deleteSession("current")
-                        }
+                        await account.deleteSession("current")
                     } catch (e) {
                         // No existing session, continue
                     }
 
                     const session = await account.createEmailPasswordSession(email, password)
-                    const [user, { jwt }] = await Promise.all([
-                        account.get<UserPrefs>(),
-                        account.createJWT()
-                    ])
-
-                    if (!user.prefs?.reputation) await account.updatePrefs<UserPrefs>({
-                        reputation: 0
-                    })
-
-                    set({ session, user, jwt })
+                    const user = await account.get<UserPrefs>()
+                    
+                    // Skip JWT and prefs update to avoid authorization errors
+                    set({ session, user, jwt: null })
                     return { success: true }
                 } catch (error) {
-                    console.log(error)
+                    console.log('Login failed:', error)
+                    // Clear any persisted session data on login failure
+                    set({ session: null, user: null, jwt: null })
                     return {
                         success: false,
                         error: error instanceof AppwriteException ?
@@ -137,9 +127,16 @@ export const useAuthStore = create<IAuthStore>()(
         })),
         {
             name: "auth",
+            partialize: (state) => ({
+                session: state.session,
+                user: state.user,
+                jwt: state.jwt
+            }),
             onRehydrateStorage() {
                 return (state, error) => {
-                    if (!error) state?.setHydrated()
+                    if (!error && state) {
+                        state.setHydrated()
+                    }
                 }
             }
         }

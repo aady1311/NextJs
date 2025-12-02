@@ -14,10 +14,12 @@ const EditButton = () => {
     return (
         <Link
             href={`/users/${userId}/${userSlug}/edit`}
-            className="relative rounded-full border border-neutral-200 px-4 py-2 text-sm font-medium text-black dark:border-white/[0.2] dark:text-white"
+            className="relative bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm border border-blue-500/30 rounded-lg px-6 py-3 text-sm font-medium text-white hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-200"
         >
-            <span>Edit</span>
-            <span className="absolute inset-x-0 -bottom-px mx-auto h-px w-1/2 bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+            <span className="flex items-center gap-2">
+                <span>✏️</span>
+                Edit Profile
+            </span>
         </Link>
     );
 };

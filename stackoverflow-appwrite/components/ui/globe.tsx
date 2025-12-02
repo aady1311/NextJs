@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react"
 import createGlobe, { COBEOptions } from "cobe"
 import { useMotionValue, useSpring } from "motion/react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/src/lib/utils"
 
 const MOVEMENT_DAMPING = 1400
 
@@ -93,7 +93,11 @@ export function Globe({
       },
     })
 
-    setTimeout(() => (canvasRef.current!.style.opacity = "1"), 0)
+    setTimeout(() => {
+      if (canvasRef.current) {
+        canvasRef.current.style.opacity = "1"
+      }
+    }, 0)
     return () => {
       globe.destroy()
       window.removeEventListener("resize", onResize)

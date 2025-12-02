@@ -18,7 +18,7 @@ export default function AskQuestion() {
         const title = formData.get("title");
         const content = formData.get("content");
         const tags = formData.get("tags");
-        const attachment = formData.get("attachment") as File;
+
 
         if (!title || !content || !tags) {
             setError("Please fill all fields");
@@ -27,25 +27,6 @@ export default function AskQuestion() {
         }
 
         try {
-            let attachmentId = null;
-            
-            // Upload file if provided
-            if (attachment && attachment.size > 0) {
-                const uploadFormData = new FormData();
-                uploadFormData.append('file', attachment);
-                uploadFormData.append('authorId', user.$id);
-                
-                const uploadResponse = await fetch('/api/upload', {
-                    method: 'POST',
-                    body: uploadFormData
-                });
-                
-                if (uploadResponse.ok) {
-                    const uploadData = await uploadResponse.json();
-                    attachmentId = uploadData.fileId;
-                }
-            }
-
             const response = await fetch('/api/questions', {
                 method: 'POST',
                 headers: {
@@ -55,8 +36,7 @@ export default function AskQuestion() {
                     title: title.toString(),
                     content: content.toString(),
                     tags: tags.toString(),
-                    authorId: user.$id,
-                    attachmentId
+                    authorId: user.$id
                 })
             });
 
@@ -79,20 +59,20 @@ export default function AskQuestion() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
+        <div className="min-h-screen bg-black py-8">
             <div className="max-w-4xl mx-auto px-4">
-                <h1 className="text-3xl font-bold mb-8">Ask a Question</h1>
+                <h1 className="text-3xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Ask a Question</h1>
                 
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg border border-gray-800 p-6">
                     {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-6">
+                        <div className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded mb-6">
                             {error}
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
-                            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="title" className="block text-sm font-medium text-white mb-2">
                                 Title
                             </label>
                             <input
@@ -100,13 +80,13 @@ export default function AskQuestion() {
                                 name="title"
                                 type="text"
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-700 bg-gray-800/50 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400"
                                 placeholder="What's your programming question? Be specific."
                             />
                         </div>
 
                         <div>
-                            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="content" className="block text-sm font-medium text-white mb-2">
                                 Content
                             </label>
                             <textarea
@@ -114,13 +94,13 @@ export default function AskQuestion() {
                                 name="content"
                                 rows={10}
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-700 bg-gray-800/50 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400"
                                 placeholder="Provide details about your question. Include what you've tried and what you expect to happen."
                             />
                         </div>
 
                         <div>
-                            <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+                            <label htmlFor="tags" className="block text-sm font-medium text-white mb-2">
                                 Tags
                             </label>
                             <input
@@ -128,37 +108,25 @@ export default function AskQuestion() {
                                 name="tags"
                                 type="text"
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-700 bg-gray-800/50 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-400"
                                 placeholder="javascript, react, nodejs (comma separated)"
                             />
                         </div>
 
-                        <div>
-                            <label htmlFor="attachment" className="block text-sm font-medium text-gray-700 mb-2">
-                                Attachment (Optional)
-                            </label>
-                            <input
-                                id="attachment"
-                                name="attachment"
-                                type="file"
-                                accept="image/*"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                            <p className="text-sm text-gray-500 mt-1">Supported: Images only (JPG, PNG, GIF - Max 5MB)</p>
-                        </div>
+
 
                         <div className="flex gap-4">
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+                                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 transition-all duration-200"
                             >
                                 {isLoading ? "Posting..." : "Post Question"}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => router.push("/questions")}
-                                className="bg-gray-300 text-gray-700 px-6 py-2 rounded hover:bg-gray-400"
+                                className="bg-gray-700 text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
                             >
                                 Cancel
                             </button>

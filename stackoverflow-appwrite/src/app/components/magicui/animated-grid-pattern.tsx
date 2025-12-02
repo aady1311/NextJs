@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/utils/cn";
-import { motion } from "framer-motion";
+import { cn } from "@/src/lib/utils";
+import { motion } from "motion/react";
 import { useEffect, useId, useRef, useState } from "react";
 
 interface GridPatternProps {
@@ -17,7 +17,7 @@ interface GridPatternProps {
     repeatDelay?: number;
 }
 
-export function GridPattern({
+function GridPattern({
     width = 40,
     height = 40,
     x = -1,
@@ -147,3 +147,4 @@ export function GridPattern({
 }
 
 export default GridPattern;
+export { GridPattern };

@@ -185,7 +185,7 @@ const MagicCard: React.FC<MagicCardProps> = ({
             }
             className={cn(
                 "relative z-0 h-full w-full rounded-2xl p-6",
-                "bg-gray-300 dark:bg-gray-700",
+                "bg-gray-800/30",
                 "bg-[radial-gradient(var(--mask-size)_circle_at_var(--mouse-x)_var(--mouse-y),var(--border-color),transparent_100%)]",
                 className
             )}
@@ -194,7 +194,7 @@ const MagicCard: React.FC<MagicCardProps> = ({
             {children}
 
             {/* Background */}
-            <div className={"absolute inset-[1px] -z-20 rounded-2xl bg-white dark:bg-black/95"} />
+            <div className={"absolute inset-[1px] -z-20 rounded-2xl bg-gray-900/80 backdrop-blur-sm"} />
         </div>
     );
 };
